@@ -135,10 +135,18 @@ namespace TxtDownload.ViewModel {
 				}
 
 				_list.Add(new ChapterModel {
-					Url = TableUrl + it.Groups[1].Value,
+					Url = GetUri(it.Groups[1].Value),
 					Title = it.Groups[2].Value
-				});
+				});;
 			}
+		}
+
+		// TableUrl = http://www.xbiquge.la/28/28056/
+		// uri = /28/28056/13639427.html
+		private string GetUri(string uri) {
+			var i = uri.LastIndexOf('/');
+			if (i > 0) i += 1;
+			return TableUrl + uri[i..];
 		}
 	}
 }
