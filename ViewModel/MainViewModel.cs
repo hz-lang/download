@@ -12,8 +12,14 @@ namespace TxtDownload.ViewModel {
 	internal sealed class MainViewModel : NotifyPropertyChanged {
 		private IList<ChapterModel> _list;
 
+		public bool Downloading { get; private set; }
 		public string TableBody { get; private set; }
 		public string ChapterBody { get; private set; }
+
+		/// <summary>
+		/// 下载的文件内容。
+		/// </summary>
+		public string Content { get; set; }
 
 		private string _tableUrl = "https://www.booktxt.net/6_6678/";
 		public string TableUrl {
@@ -48,6 +54,7 @@ namespace TxtDownload.ViewModel {
 
 			TableBody = HtmlHelper.GetBody(content);
 			TableContent = TableBody;
+			Content = null;
 		}
 
 		/// <summary>
@@ -92,11 +99,17 @@ namespace TxtDownload.ViewModel {
 				throw new ArgumentNullException(nameof(client));
 			}
 
+			// 快速通道，直接返回已经下载的数据。
+			if (!string.IsNullOrEmpty(Content)) return Content;
+
 			SetChapterUrls();
 
+			Downloading = true;
 			TableContent = string.Empty;
 
 			foreach (var it in _list) {
+				if (!Downloading) break;
+
 				var c = await it.GetContentAsync(client);
 				await Task.Run(() => it.GetBody(c, Config.Chapter));
 
@@ -107,10 +120,17 @@ namespace TxtDownload.ViewModel {
 
 			TableContent += "下载完毕";
 
-			var r = string.Join(
+			Content = string.Join(
 				Environment.NewLine,
 				_list.Select(it => it.GetChapter()));
-			return r;
+			return Content;
+		}
+
+		/// <summary>
+		/// 取消下载。
+		/// </summary>
+		public void Cancel() {
+			Downloading = false;
 		}
 
 		/// <summary>
@@ -124,6 +144,9 @@ namespace TxtDownload.ViewModel {
 			var end = TableContent.IndexOf(Config.Table.Stop);
 
 			start += Config.Table.Start.Length;
+			if (start >= end)
+				throw new NullReferenceException("网页内容为空");
+
 			var list = Regex.Matches(TableContent[start..end], Config.Table.Pattern);
 
 			_list = new List<ChapterModel>(list.Count);

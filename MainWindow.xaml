@@ -24,7 +24,7 @@
                 <Button x:Name="Open" Content="打开" Click="Open_Click"/>
             </WrapPanel>
             <TextBox Margin="3" Text="{Binding TableUrl}" HorizontalContentAlignment="Center"
-                     VerticalContentAlignment="Center"/>
+                     VerticalContentAlignment="Center" TextChanged="Url_TextChanged"/>
         </DockPanel>
 
         <DockPanel Grid.Row="1">
@@ -83,7 +83,8 @@
             </Expander>
             
             <TextBox Margin="3" Text="{Binding TableContent}"
-                     VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+                     VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                     TextChanged="Content_TextChanged"/>
         </DockPanel>
 
         <WrapPanel Grid.Row="2" HorizontalAlignment="Right">

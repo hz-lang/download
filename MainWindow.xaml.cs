@@ -1,13 +1,13 @@
-﻿using Microsoft.Win32;
-
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
+using Microsoft.Win32;
 using TxtDownload.ViewModel;
 
 namespace TxtDownload {
@@ -61,24 +61,29 @@ namespace TxtDownload {
 		// 下载。
 		private async void Download_Click(object sender, RoutedEventArgs e) {
 			try {
-				Download.IsEnabled = false;
-				await Task.Delay(3);
+				if (_ctx.Downloading) {
+					_ctx.Cancel();
+				} else {
+					Download.Content = "取消下载";
 
-				var c = await _ctx.GetChaptersAsync(_client);
+					var c = await _ctx.GetChaptersAsync(_client);
 
-				var save = new SaveFileDialog {
-					Filter = "文本文件|*.txt|所有文件|*.*"
-				};
-				if (save.ShowDialog() == true) {
-					using var sw = new StreamWriter(save.FileName);
-					sw.Write(c);
+					var save = new SaveFileDialog {
+						Filter = "文本文件|*.txt|所有文件|*.*"
+					};
+
+					if (save.ShowDialog() != true) {
+						_ctx.Cancel();
+					} else {
+						using var sw = new StreamWriter(save.FileName);
+						sw.Write(c);
+						MessageBox.Show("保存成功");
+					}
 				}
-
-				MessageBox.Show("保存成功");
 			} catch (Exception ex) {
 				MessageBox.Show(ExceptionHelper.GetError(ex));
 			} finally {
-				Download.IsEnabled = true;
+				Download.Content = "开始下载";
 			}
 		}
 
@@ -118,6 +123,19 @@ namespace TxtDownload {
 			} finally {
 				ChapterTest.IsEnabled = true;
 			}
+		}
+
+		// 文本内容改变时，滚动到最后。
+		private void Content_TextChanged(object sender, TextChangedEventArgs e) {
+			var box = e.OriginalSource as TextBox;
+			if (box is null) return;
+
+			box.ScrollToEnd();
+		}
+
+		// 网址变化时，清除下载缓存。
+		private void Url_TextChanged(object sender, TextChangedEventArgs e) {
+			_ctx.Content = null;
 		}
 	}
 }
