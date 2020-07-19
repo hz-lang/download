@@ -20,8 +20,6 @@ namespace TxtDownload.Model {
 		/// <param name="http">网络客户端。</param>
 		/// <returns>网页内容。</returns>
 		public async Task<string> GetContentAsync(HttpClient http) {
-			if (!string.IsNullOrEmpty(Content)) return Content;
-
 			if (http is null) {
 				throw new ArgumentNullException(nameof(http));
 			}
@@ -40,8 +38,6 @@ namespace TxtDownload.Model {
 		/// <param name="pattern">匹配模式。</param>
 		/// <returns>解析后的章节内容。</returns>
 		public string GetBody(string content, PagePatternViewModel pattern) {
-			if (!string.IsNullOrEmpty(Body)) return Body;
-
 			if (content is null) {
 				throw new ArgumentNullException(nameof(content));
 			}
@@ -57,8 +53,12 @@ namespace TxtDownload.Model {
 
 			var list = Regex.Matches(content[start..end], pattern.Pattern);
 			foreach (Match it in list) {
-				if (it.Success && it.Groups.Count == 2)
-					sb.AppendLine(it.Groups[1].Value);
+				if (it.Success && it.Groups.Count == 2) {
+					var line = it.Groups[1].Value;
+					if (!string.IsNullOrEmpty(line)) {
+						sb.AppendLine(line);
+					}
+				}
 			}
 
 			Body = sb.ToString();
