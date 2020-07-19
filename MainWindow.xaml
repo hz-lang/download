@@ -23,7 +23,8 @@
             <WrapPanel DockPanel.Dock="Right">
                 <Button x:Name="Open" Content="打开" Click="Open_Click"/>
             </WrapPanel>
-            <TextBox Margin="3" Text="{Binding TableUrl}" VerticalContentAlignment="Center"/>
+            <TextBox Margin="3" Text="{Binding TableUrl}" HorizontalContentAlignment="Center"
+                     VerticalContentAlignment="Center"/>
         </DockPanel>
 
         <DockPanel Grid.Row="1">
@@ -55,9 +56,6 @@
                                         Click="TableTest_Click"/>
                                 <TextBox Text="{Binding Pattern}"/>
                             </DockPanel>
-                            <TextBox x:Name="TableResult" Height="60"
-                                     VerticalScrollBarVisibility="Auto"
-                                     HorizontalScrollBarVisibility="Auto"/>
                         </StackPanel>
                     </GroupBox>
 
@@ -75,9 +73,6 @@
                                         Click="ChapterTest_Click"/>
                                 <TextBox Text="{Binding Pattern}"/>
                             </DockPanel>
-                            <TextBox x:Name="ChapterResult" Height="80"
-                                     VerticalScrollBarVisibility="Auto"
-                                     HorizontalScrollBarVisibility="Auto"/>
                         </StackPanel>
                     </GroupBox>
 

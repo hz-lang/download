@@ -27,8 +27,6 @@ namespace TxtDownload {
 			TableTest.IsEnabled = false;
 			ChapterTest.IsEnabled = false;
 			Download.IsEnabled = false;
-			TableResult.Visibility = Visibility.Collapsed;
-			ChapterResult.Visibility = Visibility.Collapsed;
 
 			Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -97,14 +95,13 @@ namespace TxtDownload {
 				await Task.Delay(3);
 
 				var r = _ctx.GetTable();
-				TableResult.Text = r;
+				new ResultWindow(_ctx.TableBody, r).ShowDialog();
 
 				ChapterTest.IsEnabled = true;
 			} catch (Exception ex) {
-				TableResult.Text = ExceptionHelper.GetError(ex);
+				MessageBox.Show(ExceptionHelper.GetError(ex));
 			} finally {
 				TableTest.IsEnabled = true;
-				TableResult.Visibility = Visibility.Visible;
 			}
 		}
 
@@ -115,12 +112,11 @@ namespace TxtDownload {
 				await Task.Delay(3);
 
 				var r = await _ctx.GetChapterAsync(_client);
-				ChapterResult.Text = r;
+				new ResultWindow(_ctx.ChapterBody, r).ShowDialog();
 			} catch (Exception ex) {
-				ChapterResult.Text = ExceptionHelper.GetError(ex);
+				MessageBox.Show(ExceptionHelper.GetError(ex));
 			} finally {
 				ChapterTest.IsEnabled = true;
-				ChapterResult.Visibility = Visibility.Visible;
 			}
 		}
 	}

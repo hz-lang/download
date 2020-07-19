@@ -11,7 +11,9 @@ using TxtDownload.Model;
 namespace TxtDownload.ViewModel {
 	internal sealed class MainViewModel : NotifyPropertyChanged {
 		private IList<ChapterModel> _list;
-		private string _tableCache;
+
+		public string TableBody { get; private set; }
+		public string ChapterBody { get; private set; }
 
 		private string _tableUrl = "https://www.booktxt.net/6_6678/";
 		public string TableUrl {
@@ -44,8 +46,8 @@ namespace TxtDownload.ViewModel {
 
 			var content = await HttpClientHelper.GetStringAsync(client, TableUrl);
 
-			_tableCache = HtmlHelper.GetBody(content);
-			TableContent = _tableCache;
+			TableBody = HtmlHelper.GetBody(content);
+			TableContent = TableBody;
 		}
 
 		/// <summary>
@@ -76,8 +78,8 @@ namespace TxtDownload.ViewModel {
 			if (c == null)
 				return "空";
 
-			var content = await c.GetContentAsync(client);
-			return c.GetBody(content, Config.Chapter);
+			ChapterBody = await c.GetContentAsync(client);
+			return c.GetBody(ChapterBody, Config.Chapter);
 		}
 
 		/// <summary>
