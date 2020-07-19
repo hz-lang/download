@@ -8,7 +8,7 @@
 			_table = new PagePatternViewModel {
 				Start = "正文</dt>",
 				Stop = "</dl>",
-				Pattern = "<a href =\"([^\"]+)\">([^<]+)</a>"
+				Pattern = "<a href =\"([^\"]+?)\">([^<]+?)</a>"
 			};
 
 			// <div id="content"><br /><br />　　“咦？”<br /><br />
@@ -17,7 +17,7 @@
 			_chapter = new PagePatternViewModel {
 				Start = "<div id=\"content\"><br /><br />",
 				Stop = "<script>chaptererror();</script>",
-				Pattern = ">.*?([^\x00-\xff]+).*?<"
+				Pattern = ">(?:&nbsp;)*([^<]+?)<"
 			};
 		}
 
