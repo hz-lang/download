@@ -18,16 +18,21 @@ namespace TxtDownload.Model {
 		/// 获取网页内容。
 		/// </summary>
 		/// <param name="http">网络客户端。</param>
+		/// <param name="charSet">网页字符集。</param>
 		/// <returns>网页内容。</returns>
-		public async Task<string> GetContentAsync(HttpClient http) {
+		public async Task<string> GetContentAsync(HttpClient http, string charSet) {
 			if (http is null) {
 				throw new ArgumentNullException(nameof(http));
+			}
+
+			if (string.IsNullOrEmpty(charSet)) {
+				throw new ArgumentException("字符集为空", nameof(charSet));
 			}
 
 			if (string.IsNullOrEmpty(Url))
 				throw new NullReferenceException("网址为空");
 
-			var content = await HttpClientHelper.GetStringAsync(http, Url);
+			var content = await HttpClientHelper.GetStringAsync(http, Url, charSet);
 
 			Content = HtmlHelper.GetBody(content);
 			return Content;

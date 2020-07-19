@@ -21,6 +21,13 @@
 			};
 		}
 
+		private string _charSet = "gbk";
+		public string CharSet {
+			get { return _charSet; }
+			set { _charSet = value; OnChanged(); }
+		}
+
+
 		private PagePatternViewModel _table;
 		public PagePatternViewModel Table {
 			get { return _table; }

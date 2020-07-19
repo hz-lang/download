@@ -11,7 +11,7 @@ namespace TxtDownload {
 		/// <param name="client">网络客户端。</param>
 		/// <param name="uri">网页的网址。</param>
 		/// <returns>网页的字符串形式。</returns>
-		public static async Task<string> GetStringAsync(HttpClient client, string uri, string charSet = "gbk") {
+		public static async Task<string> GetStringAsync(HttpClient client, string uri, string charSet) {
 			if (client is null) {
 				throw new ArgumentNullException(nameof(client));
 			}

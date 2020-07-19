@@ -42,6 +42,13 @@
                         </Style>
                     </StackPanel.Resources>
 
+                    <GroupBox Header="字符集">
+                        <StackPanel>
+                            <TextBlock Text="编码"/>
+                            <TextBox Text="{Binding CharSet}"/>
+                        </StackPanel>
+                    </GroupBox>
+
                     <GroupBox Header="目录" DataContext="{Binding Table}">
                         <StackPanel>
                             <TextBlock Text="开始"/>

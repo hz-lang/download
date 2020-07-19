@@ -50,10 +50,10 @@ namespace TxtDownload.ViewModel {
 				throw new ArgumentNullException(nameof(client));
 			}
 
-			var content = await HttpClientHelper.GetStringAsync(client, TableUrl);
+			var content = await HttpClientHelper.GetStringAsync(client, TableUrl, Config.CharSet);
 
+			TableContent = content;
 			TableBody = HtmlHelper.GetBody(content);
-			TableContent = TableBody;
 			Content = null;
 		}
 
@@ -85,7 +85,7 @@ namespace TxtDownload.ViewModel {
 			if (c == null)
 				return "空";
 
-			ChapterBody = await c.GetContentAsync(client);
+			ChapterBody = await c.GetContentAsync(client, Config.CharSet);
 			return c.GetBody(ChapterBody, Config.Chapter);
 		}
 
@@ -110,7 +110,7 @@ namespace TxtDownload.ViewModel {
 			foreach (var it in _list) {
 				if (!Downloading) break;
 
-				var c = await it.GetContentAsync(client);
+				var c = await it.GetContentAsync(client, Config.CharSet);
 				await Task.Run(() => it.GetBody(c, Config.Chapter));
 
 				TableContent += it.Title +
