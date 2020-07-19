@@ -17,7 +17,7 @@
 			_chapter = new PagePatternViewModel {
 				Start = "<div id=\"content\"><br /><br />",
 				Stop = "<script>chaptererror();</script>",
-				Pattern = ">([^<]+?)<"
+				Pattern = ">(?:&nbsp;)*([^<]+?)<"
 			};
 		}
 
