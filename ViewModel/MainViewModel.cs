@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -45,10 +44,7 @@ namespace TxtDownload.ViewModel {
 
 			var content = await HttpClientHelper.GetStringAsync(client, TableUrl);
 
-			var start = content.IndexOf("<body>");
-			var end = content.IndexOf("</body>");
-
-			_tableCache = content[(start + 6)..end];
+			_tableCache = HtmlHelper.GetBody(content);
 			TableContent = _tableCache;
 		}
 
@@ -127,7 +123,7 @@ namespace TxtDownload.ViewModel {
 
 			start += Config.Table.Start.Length;
 			var list = Regex.Matches(TableContent[start..end], Config.Table.Pattern);
-			
+
 			_list = new List<ChapterModel>(list.Count);
 			foreach (Match it in list) {
 				if (!it.Success || it.Groups.Count != 3) {
@@ -137,7 +133,7 @@ namespace TxtDownload.ViewModel {
 				_list.Add(new ChapterModel {
 					Url = GetUri(it.Groups[1].Value),
 					Title = it.Groups[2].Value
-				});;
+				});
 			}
 		}
 
@@ -146,6 +142,7 @@ namespace TxtDownload.ViewModel {
 		private string GetUri(string uri) {
 			var i = uri.LastIndexOf('/');
 			if (i > 0) i += 1;
+			else i = 0;
 			return TableUrl + uri[i..];
 		}
 	}

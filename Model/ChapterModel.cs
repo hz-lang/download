@@ -27,7 +27,9 @@ namespace TxtDownload.Model {
 			if (string.IsNullOrEmpty(Url))
 				throw new NullReferenceException("网址为空");
 
-			Content = await HttpClientHelper.GetStringAsync(http, Url);
+			var content = await HttpClientHelper.GetStringAsync(http, Url);
+
+			Content = HtmlHelper.GetBody(content);
 			return Content;
 		}
 

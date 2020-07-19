@@ -102,8 +102,7 @@ namespace TxtDownload {
 				ChapterTest.IsEnabled = true;
 			} catch (Exception ex) {
 				TableResult.Text = ExceptionHelper.GetError(ex);
-			}
-			finally {
+			} finally {
 				TableTest.IsEnabled = true;
 				TableResult.Visibility = Visibility.Visible;
 			}
